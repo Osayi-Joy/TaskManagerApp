@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="style.css">
+	<title>Archive</title>
+</head>
+<header class="p-3 bg-dark text-white">
+	<div class="container">
+		<div class="d-flex flex-wrap align-items-center">
+
+			<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+				<li><a class="btn btn-primary mx-2" th:href="@{/archivePriority}">Sort By Priority</a></li>
+				<li><a class="btn btn-primary mx-2" th:href="@{/archive}">Sort By Date</a></li>
+				<li><a class="btn btn-secondary mx-2" th:href="@{/list}">Go back to the List</a></li>
+			</ul>
+			<div>
+				<span th:text="${#authentication.getPrincipal().getFirstName()}"></span>
+				<span th:text="${#authentication.getPrincipal().getLastName()}"></span>
+			</div>
+			<div class="text-end">
+				<a type="button" class="btn btn-warning mx-2" th:href="@{/logout}">Logout</a>
+			</div>
+		</div>
+	</div>
+</header>
+<body>
+<div class="text-center m-5">
+	<table>
+		<tr th:each="item : ${items}" th:if="${item.status} == 'ARCHIVE' and ${item.user.id} == ${#authentication.getPrincipal().getId()}">
+			<div class="card text-center m-3" style="width: 20rem; display: inline-block; vertical-align:middle;"
+				 th:classappend="${(item.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
+                                (item.priority == 'HIGH' ? 'bg-secondary text-white': '') +
+                                (item.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
+                                (item.priority == 'MINOR' ? 'bg-success text-white': '')}">
+				<div class="card-body">
+					<h5 class="card-title" th:text="${item.name}"></h5>
+					<div class="d-flex justify-content-between">
+						<p class="card-subtitle mb-2" th:text="${#temporals.format(item.dueDate, 'dd.MM.yyyy')}"></p>
+						<p class="card-text" th:text="${item.priority}"></p>
+					</div>
+					<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${item.id})}">Restore</a>
+					<a class="btn btn-danger btn-delete" th:href="@{/delete/(id=${item.id})}">Delete</a>
+				</div>
+			</div>
+		</tr>
+	</table>
+</div>
+
+<div class="modal fade" id="status-modal" tabindex="-1" aria-labelledby="status-modal-title" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="status-modal-title">Change Status</h5>
+			</div>
+			<div class="modal-body">
+				<h6>Are you sure you want to restore the item from archive?</h6>
+				<br>
+				<form th:action="@{/update}" method="PUT" style="max-width: 600px; margin: 0 auto;" id="status-form">
+					<input type="hidden" id="id" name="id"/>
+					<input type="hidden" id="name" name="name"/>
+					<input type="hidden" id="dueDate" name="dueDate"/>
+					<input type="hidden" id="priority" name="priority"/>
+					<input type="hidden" id="newStatus" name="status"/>
+					<input type="hidden" id="user" name="user"/>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a type="button" class="btn btn-secondary"
+				   href="javascript:window.location.href=window.location.href">Close</a>
+				<button type="submit" class="btn btn-primary" form="status-form">Restore</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to delete this item?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<a href="" type="button" class="btn btn-danger" id="delRef">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+		integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+</script>
+<script type="text/javascript" th:inline="javascript">
+
+
+		$('document').ready(function () {
+			$(".btn-delete").on('click', function (event) {
+
+				event.preventDefault();
+
+				var href = $(this).attr('href');
+
+				$('#delete-modal #delRef').attr('href', href);
+				$('#delete-modal').modal('show');
+			});
+
+			$(".btn-edit").on('click', function (event) {
+
+				event.preventDefault();
+
+				var href = $(this).attr('href');
+
+				$.get(href, function (item, status) {
+					$('#id').val(item.id)
+					$('#name').val(item.name)
+					$('#dueDate').val(item.dueDate)
+					$('#priority').val(item.priority)
+					$('#newStatus').val('TODO')
+					$('#user').val(item.user)
+				});
+
+				$('#status-modal').modal({ backdrop: 'static', keyboard: false });
+				$('#status-modal').modal('show');
+			});
+		});
+
+
+
+</script>
+</body>

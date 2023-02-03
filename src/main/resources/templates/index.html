@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Home</title>
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+
+</head>
+<body>
+
+<div class="app-container text-center">
+<!--	<img class="image-container" th:src="@{/images/front.png}"/>-->
+<div class="text-sign-container">
+	<div>
+		<h1>TO DO LIST</h1>
+	</div>
+	<div>
+		<h3><a class="btn btn-lg btn-primary my-2" th:href="@{/signup}">Sign Up</a></h3>
+		<h3><a class="btn btn-lg btn-success" th:href="@{/login}">Sign In</a></h3>
+	</div>
+</div>
+
+</div>
+</body>
+</html>

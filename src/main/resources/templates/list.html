@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="style.css">
+	<title>To Do List</title>
+</head>
+
+<body>
+<header class="sticky-top p-3 bg-dark text-white">
+	<div class="container">
+		<div class="d-flex flex-wrap align-items-center">
+
+			<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+				<li><a class="btn btn-success mx-2" data-bs-toggle="modal" data-bs-target="#add-modal">Add new</a></li>
+				<li><a class="btn btn-primary mx-2" th:href="@{/listPriority}">Sort By Priority</a></li>
+				<li><a class="btn btn-primary mx-2" th:href="@{/list}">Sort By Date</a></li>
+				<li><a class="btn btn-secondary mx-2" th:href="@{/archive}">Archive</a></li>
+			</ul>
+			<div>
+				<span th:text="${#authentication.getPrincipal().getFirstName()}"></span>
+				<span th:text="${#authentication.getPrincipal().getLastName()}"></span>
+			</div>
+			<div class="text-end">
+				<a type="button" class="btn btn-warning mx-2" th:href="@{/logout}">Logout</a>
+			</div>
+		</div>
+	</div>
+</header>
+<div class="container" style="margin-bottom: 30px;">
+	<div class="row">
+		<div class="col col-4" id="col-todo">
+			<h3 class="card-header text-center">
+				TO DO
+			</h3>
+			<div class="card mb-4 text-center" th:each="item : ${items}"
+				 th:if="${item.status} == 'TODO' and ${item.user.id} == ${#authentication.getPrincipal().getId()}" draggable="true" id="card-todo"
+				 th:href="@{/getOne/(id=${item.id})}"
+				 th:classappend="${(item.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
+                                (item.priority == 'HIGH' ? 'bg-secondary text-white': '') +
+                                (item.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
+                                (item.priority == 'MINOR' ? 'bg-success text-white': '')}">
+				<div class="card-body">
+					<h5 class="bg-danger text-white" th:if="${item.dueDate == (today)}">TODAY!</h5>
+					<h5 class="card-title" th:text="${item.name}"></h5>
+					<div class="d-flex justify-content-between">
+						<p class="card-subtitle mb-2"
+						   th:classappend="${item.dueDate &lt; (today)} ? 'bg-danger'"
+						   th:text="${#temporals.format(item.dueDate, 'dd.MM.yyyy')}"></p>
+
+						<p class="card-text" th:text="${item.priority}"></p>
+					</div>
+					<div class="text-center">
+						<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${item.id})}">Edit</a>
+						<a class="btn btn-danger btn-delete mx-1" th:href="@{/delete/(id=${item.id})}">Delete</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col col-4" id="col-doing">
+			<h3 class="card-header text-center">
+				DOING
+			</h3>
+			<div class="card mb-4 text-center" th:each="item : ${items}"
+				 th:if="${item.status} == 'DOING' and ${item.user.id} == ${#authentication.getPrincipal().getId()}" draggable="true"
+				 th:id="card-doing" th:href="@{/getOne/(id=${item.id})}"
+				 th:classappend="${(item.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
+                                (item.priority == 'HIGH' ? 'bg-secondary text-white': '') +
+                                (item.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
+                                (item.priority == 'MINOR' ? 'bg-success text-white': '')}">
+				<div class="card-body">
+					<h5 class="bg-danger text-white" th:if="${item.dueDate == (today)}">TODAY!</h5>
+					<h5 class="card-title" th:text="${item.name}"></h5>
+					<div class="d-flex justify-content-between">
+						<p class="card-subtitle mb-2"
+						   th:classappend="${item.dueDate &lt; (today)} ? 'bg-danger'"
+						   th:text="${#temporals.format(item.dueDate, 'dd.MM.yyyy')}"></p>
+
+						<p class="card-text" th:text="${item.priority}"></p>
+					</div>
+					<div class="text-center">
+						<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${item.id})}">Edit</a>
+						<a class="btn btn-danger btn-delete mx-1" th:href="@{/delete/(id=${item.id})}">Delete</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col col-4" id="col-done">
+			<h3 class="card-header text-center">
+				DONE
+			</h3>
+			<div class="card mb-4 text-center" th:each="item : ${items}"
+				 th:if="${item.status} == 'DONE' and ${item.user.id} == ${#authentication.getPrincipal().getId()}" draggable="true" id="card-done"
+				 th:href="@{/getOne/(id=${item.id})}"
+				 th:classappend="${(item.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
+                                (item.priority == 'HIGH' ? 'bg-secondary text-white': '') +
+                                (item.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
+                                (item.priority == 'MINOR' ? 'bg-success text-white': '')}">
+				<div class="card-body">
+					<h5 class="card-title" th:text="${item.name}"></h5>
+					<div class="d-flex justify-content-between">
+						<p class="card-subtitle mb-2" th:text="${#temporals.format(item.dueDate, 'dd.MM.yyyy')}"></p>
+						<p class="card-text" th:text="${item.priority}"></p>
+					</div>
+					<div class="text-center">
+						<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${item.id})}">Edit</a>
+						<a class="btn btn-danger btn-delete mx-1" th:href="@{/delete/(id=${item.id})}">Delete</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer class="fixed-bottom bg-dark text-white">
+	<h4 class="d-block col text-center bt-2" id="col-archive">Drop here to archive</h4>
+</footer>
+
+<div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="add-modal-title" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="add-modal-title">Create New Item</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form th:action="@{/new}" method="POST" style="max-width: 600px; margin: 0 auto;" id="add-form">
+					<div class="m-3">
+						<div class="form-group row m-3">
+							<label class="col-form-label col-4">Name</label>
+							<div class="col-8">
+								<input type="text" class="form-control" name="name" required minlength="1"
+									   maxlength="100">
+							</div>
+						</div>
+						<div class="form-group row m-3">
+							<label class="col-form-label col-4">Due Date</label>
+							<div class="col-8">
+								<input type="date" name="dueDate" placeholder="Due date" required>
+							</div>
+						</div>
+						<div class="form-group row m-3">
+							<label class="col-form-label col-4">Priority</label>
+							<div class="col-8">
+								<select class="form-select" name="priority" required>
+									<option th:each="priority : ${T(com.example.ToDoList.entity.Priority).values()}"
+											th:value="${priority}" th:text="${priority}"></option>
+								</select>
+							</div>
+						</div>
+						<input type="hidden" name="status" th:value="TODO"/>
+						<input type="hidden" name="user" th:value="${#authentication.getPrincipal().getId()}"/>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-primary" form="add-form">Add item</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="edit-modal-title" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="edit-modal-title">Edit Item</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form th:action="@{/update}" method="PUT" style="max-width: 600px; margin: 0 auto;" id="edit-form">
+					<input type="hidden" id="idEdit" name="id" th:value="${itemId}"/>
+					<div class="m-3">
+						<div class="form-group row m-3">
+							<label class="col-form-label col-4">Name</label>
+							<div class="col-8">
+								<input type="text" class="form-control" id="nameEdit" name="name" required
+									   minlength="1" maxlength="100">
+							</div>
+						</div>
+						<div class="form-group row m-3">
+							<label class="col-form-label col-4">Due Date</label>
+							<div class="col-8">
+								<input type="date" id="dueDateEdit" name="dueDate" placeholder="Due date" required>
+							</div>
+						</div>
+						<div class="form-group row m-3">
+							<label class="col-form-label col-4">Priority</label>
+							<div class="col-8">
+								<select class="form-select" id="priorityEdit" name="priority" required>
+									<option th:each="priority : ${T(com.example.ToDoList.entity.Priority).values()}"
+											th:value="${priority}" th:text="${priority}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row m-3">
+							<label class="col-form-label col-4">Status</label>
+							<div class="col-8">
+								<select class="form-select" id="statusEdit" name="status" required>
+									<option th:each="status : ${T(com.example.ToDoList.entity.Status).values()}"
+											th:value="${status}" th:text="${status}"></option>
+								</select>
+							</div>
+						</div>
+						<input type="hidden" id="userEdit" name="user"/>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-primary" form="edit-form">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="status-modal" tabindex="-1" aria-labelledby="status-modal-title" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="status-modal-title">Change Status</h5>
+			</div>
+			<div class="modal-body">
+				<h6>Are you sure you want to change the status?</h6>
+				<br>
+				<form th:action="@{/update}" method="PUT" style="max-width: 600px; margin: 0 auto;" id="status-form">
+					<input type="hidden" id="id" name="id"/>
+					<input type="hidden" id="name" name="name"/>
+					<input type="hidden" id="dueDate" name="dueDate"/>
+					<input type="hidden" id="priority" name="priority"/>
+					<input type="hidden" id="newStatus" name="status"/>
+					<input type="hidden" id="user" name="user"/>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a type="button" class="btn btn-secondary"
+				   href="javascript:window.location.href=window.location.href">Close</a>
+				<button type="submit" class="btn btn-primary" form="status-form">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to delete this item?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<a href="" type="button" class="btn btn-danger" id="delRef">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+		integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+</script>
+<script type="text/javascript" th:inline="javascript">
+
+
+		var newStatus;
+		var sameColumn;
+
+		$('document').ready(function () {
+			$(".btn-edit").on('click', function (event) {
+
+				event.preventDefault();
+
+				var href = $(this).attr('href');
+
+				$.get(href, function (item, status) {
+					$('#idEdit').val(item.id)
+					$('#nameEdit').val(item.name)
+					$('#dueDateEdit').val(item.dueDate)
+					$('#priorityEdit').val(item.priority)
+					$('#statusEdit').val(item.status)
+					$('#userEdit').val(item.user)
+				});
+
+				$('#edit-modal').modal('show');
+
+			});
+
+			$(".btn-delete").on('click', function (event) {
+
+				event.preventDefault();
+
+				var href = $(this).attr('href');
+
+				$('#delete-modal #delRef').attr('href', href);
+				$('#delete-modal').modal('show');
+			});
+
+			$(".card").on('dragend', function (event) {
+
+				var dragOver = event.target;
+				var dragOverParent = dragOver.parentElement;
+				var beingDragged = document.querySelector(".dragging");
+				var parentId = dragOverParent.id;
+				changeStatus(parentId, beingDragged);
+
+				if (sameColumn == false) {
+
+					event.preventDefault();
+
+					var href = $(this).attr('href');
+
+					$.get(href, function (item, status) {
+						$('#id').val(item.id)
+						$('#name').val(item.name)
+						$('#dueDate').val(item.dueDate)
+						$('#priority').val(item.priority)
+						$('#newStatus').val(newStatus)
+						$('#user').val(item.user)
+					});
+
+					$('#status-modal').modal({backdrop: 'static', keyboard: false});
+					$('#status-modal').modal('show');
+
+				}
+
+			});
+		});
+
+
+
+
+		document.addEventListener('dragstart', function () {
+			beingDragged(event);
+		});
+		document.addEventListener('dragend', function () {
+			dragEnd(event);
+		});
+		document.addEventListener('dragover', function () {
+			var beingDragged = document.querySelector(".dragging")
+			if (event.target.matches('.card')) {
+				if (beingDragged.classList.contains('card')) {
+					allowDrop(event);
+				}
+			}
+			if (event.target.matches('.col')) {
+				if (beingDragged.classList.contains('card')) {
+					colDraggedOver(event);
+				}
+				if (beingDragged.classList.contains('col')) {
+					allowDrop(event);
+				}
+			}
+		});
+		function beingDragged(ev) {
+			var draggedEl = ev.target;
+			draggedEl.classList.add("dragging");
+		}
+		function dragEnd(ev) {
+			var dragOver = ev.target;
+			var dragOverParent = dragOver.parentElement;
+			var beingDragged = document.querySelector(".dragging");
+			var draggedEl = ev.target;
+			draggedEl.classList.remove("dragging");
+			var parentId = dragOverParent.id;
+		}
+
+		function allowDrop(ev) {
+			ev.preventDefault();
+			//var project = document.getElementById('project');
+			var dragOver = ev.target;
+			var dragOverParent = dragOver.parentElement;
+			var beingDragged = document.querySelector(".dragging");
+			var draggedParent = beingDragged.parentElement;
+			var project = document.getElementById("project");
+			var draggedIndex = whichChild(beingDragged);
+			var dragOverIndex = whichChild(dragOver);
+			if (draggedParent === dragOverParent) {
+				if (draggedIndex < dragOverIndex) {
+					draggedParent.insertBefore(dragOver, beingDragged);
+				}
+				if (draggedIndex > dragOverIndex) {
+					draggedParent.insertBefore(dragOver, beingDragged.nextSibling);
+				}
+			}
+			if (draggedParent !== dragOverParent) {
+				dragOverParent.insertBefore(beingDragged, dragOver);
+			}
+
+		}
+		function colDraggedOver(event) {
+			var dragOver = event.target;
+			var beingDragged = document.querySelector(".dragging");
+			var draggedParent = beingDragged.parentElement;
+			if (draggedParent.id !== dragOver.id && draggedParent.classList.contains('col') && dragOver.classList.contains('col')) {
+				if (dragOver.childElementCount == 0 || event.clientY > dragOver.children[dragOver.childElementCount - 1].offsetTop) {
+					dragOver.appendChild(beingDragged);
+				}
+			}
+		}
+		function drag(ev) {
+			ev.dataTransfer.setData("text", ev.target.id);
+		}
+
+		function drop(ev) {
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("text");
+			ev.target.appendChild(document.getElementById(data));
+		}
+		function whichChild(el) {
+			var i = 0;
+			while ((el = el.previousSibling) != null) ++i;
+			return i;
+		}
+
+		function changeStatus(parentId, beingDragged) {
+
+			if (parentId.substring(4) == beingDragged.id.substring(5)) {
+				sameColumn = true;
+			}
+
+			else {
+				sameColumn = false;
+
+				if (parentId == 'col-todo') {
+					beingDragged.id = "card-todo"
+					newStatus = "TODO";
+				}
+				else if (parentId == 'col-doing') {
+					beingDragged.id = "card-doing"
+					newStatus = "DOING";
+				}
+				else if (parentId == 'col-done') {
+					beingDragged.id = "card-done"
+					newStatus = "DONE";
+				}
+				else if (parentId == 'col-archive') {
+					beingDragged.id = "card-archive"
+					newStatus = "ARCHIVE";
+				}
+			}
+		}
+
+</script>
+</body>
