@@ -1,5 +1,7 @@
-package com.example.ToDoList.entity;
+package com.jconcept.week_8_taskmanagerapp.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -7,7 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "items")
-public class Item {
+public class Task {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +28,10 @@ public class Item {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public Item() {
+	public Task() {
 	}
 
-	public Item(String name, LocalDate dueDate, String priority, String status, User user) {
+	public Task(String name, LocalDate dueDate, String priority, String status, User user) {
 		this.name = name;
 		this.dueDate = dueDate;
 		this.priority = priority;

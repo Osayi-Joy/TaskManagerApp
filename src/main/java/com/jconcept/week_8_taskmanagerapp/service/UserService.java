@@ -1,9 +1,8 @@
-package com.example.ToDoList.service;
+package com.jconcept.week_8_taskmanagerapp.service;
 
-import com.example.ToDoList.entity.User;
-import com.example.ToDoList.repository.UserRepository;
+import com.jconcept.week_8_taskmanagerapp.entity.User;
+import com.jconcept.week_8_taskmanagerapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service

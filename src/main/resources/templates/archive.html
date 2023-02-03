@@ -15,7 +15,7 @@
 			<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
 				<li><a class="btn btn-primary mx-2" th:href="@{/archivePriority}">Sort By Priority</a></li>
 				<li><a class="btn btn-primary mx-2" th:href="@{/archive}">Sort By Date</a></li>
-				<li><a class="btn btn-secondary mx-2" th:href="@{/list}">Go back to the List</a></li>
+				<li><a class="btn btn-secondary mx-2" th:href="@{/list}">Go back to the Tasks</a></li>
 			</ul>
 			<div>
 				<span th:text="${#authentication.getPrincipal().getFirstName()}"></span>
@@ -30,20 +30,20 @@
 <body>
 <div class="text-center m-5">
 	<table>
-		<tr th:each="item : ${items}" th:if="${item.status} == 'ARCHIVE' and ${item.user.id} == ${#authentication.getPrincipal().getId()}">
+		<tr th:each="task : ${tasks}" th:if="${task.status} == 'ARCHIVE' and ${task.user.id} == ${#authentication.getPrincipal().getId()}">
 			<div class="card text-center m-3" style="width: 20rem; display: inline-block; vertical-align:middle;"
-				 th:classappend="${(item.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
-                                (item.priority == 'HIGH' ? 'bg-secondary text-white': '') +
-                                (item.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
-                                (item.priority == 'MINOR' ? 'bg-success text-white': '')}">
+				 th:classappend="${(task.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
+                                (task.priority == 'HIGH' ? 'bg-secondary text-white': '') +
+                                (task.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
+                                (task.priority == 'MINOR' ? 'bg-success text-white': '')}">
 				<div class="card-body">
-					<h5 class="card-title" th:text="${item.name}"></h5>
+					<h5 class="card-title" th:text="${task.name}"></h5>
 					<div class="d-flex justify-content-between">
-						<p class="card-subtitle mb-2" th:text="${#temporals.format(item.dueDate, 'dd.MM.yyyy')}"></p>
-						<p class="card-text" th:text="${item.priority}"></p>
+						<p class="card-subtitle mb-2" th:text="${#temporals.format(task.dueDate, 'dd.MM.yyyy')}"></p>
+						<p class="card-text" th:text="${task.priority}"></p>
 					</div>
-					<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${item.id})}">Restore</a>
-					<a class="btn btn-danger btn-delete" th:href="@{/delete/(id=${item.id})}">Delete</a>
+					<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${task.id})}">Restore</a>
+					<a class="btn btn-danger btn-delete" th:href="@{/delete/(id=${task.id})}">Delete</a>
 				</div>
 			</div>
 		</tr>
@@ -57,7 +57,7 @@
 				<h5 class="modal-title" id="status-modal-title">Change Status</h5>
 			</div>
 			<div class="modal-body">
-				<h6>Are you sure you want to restore the item from archive?</h6>
+				<h6>Are you sure you want to restore the task from archive?</h6>
 				<br>
 				<form th:action="@{/update}" method="PUT" style="max-width: 600px; margin: 0 auto;" id="status-form">
 					<input type="hidden" id="id" name="id"/>
@@ -85,7 +85,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				Are you sure you want to delete this item?
+				Are you sure you want to delete this task?
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -125,13 +125,13 @@
 
 				var href = $(this).attr('href');
 
-				$.get(href, function (item, status) {
-					$('#id').val(item.id)
-					$('#name').val(item.name)
-					$('#dueDate').val(item.dueDate)
-					$('#priority').val(item.priority)
+				$.get(href, function (task, status) {
+					$('#id').val(task.id)
+					$('#name').val(task.name)
+					$('#dueDate').val(task.dueDate)
+					$('#priority').val(task.priority)
 					$('#newStatus').val('TODO')
-					$('#user').val(item.user)
+					$('#user').val(task.user)
 				});
 
 				$('#status-modal').modal({ backdrop: 'static', keyboard: false });

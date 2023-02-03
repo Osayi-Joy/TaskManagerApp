@@ -1,18 +1,16 @@
-package com.example.ToDoList.repository;
+package com.jconcept.week_8_taskmanagerapp.repository;
 
-import com.example.ToDoList.entity.Item;
-import com.example.ToDoList.entity.User;
+import com.jconcept.week_8_taskmanagerapp.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface TaskRepository extends JpaRepository<Task, Long> {
 
-	List<Item> findAllByOrderByDueDateAscPriorityAsc();
+	List<Task> findAllByOrderByDueDateAscPriorityAsc();
 
-	List<Item> findAllByOrderByDueDateAscPriorityDesc();
+	List<Task> findAllByOrderByDueDateAscPriorityDesc();
 
-	List<Item> findAllByOrderByPriorityAscDueDateAsc();
+	List<Task> findAllByOrderByPriorityAscDueDateAsc();
 
 }

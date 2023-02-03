@@ -1,7 +1,7 @@
-package com.example.ToDoList.service;
+package com.jconcept.week_8_taskmanagerapp.service;
 
-import com.example.ToDoList.entity.Item;
-import com.example.ToDoList.repository.ItemRepository;
+import com.jconcept.week_8_taskmanagerapp.entity.Task;
+import com.jconcept.week_8_taskmanagerapp.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,44 +9,44 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ItemService {
+public class TaskService {
 
 	@Autowired
-	private ItemRepository itemRepository;
+	private TaskRepository taskRepository;
 
-	public List<Item> findAllByOrderByDateAsc() {
-		return itemRepository.findAllByOrderByDueDateAscPriorityAsc();
+	public List<Task> findAllByOrderByDateAsc() {
+		return taskRepository.findAllByOrderByDueDateAscPriorityAsc();
 	}
 
-	public List<Item> findAllByOrderByDateDesc() {
-		return itemRepository.findAllByOrderByDueDateAscPriorityAsc();
+	public List<Task> findAllByOrderByDateDesc() {
+		return taskRepository.findAllByOrderByDueDateAscPriorityAsc();
 	}
 
-	public List<Item> findAllByOrderByPriorityAsc() {
-		return itemRepository.findAllByOrderByPriorityAscDueDateAsc();
+	public List<Task> findAllByOrderByPriorityAsc() {
+		return taskRepository.findAllByOrderByPriorityAscDueDateAsc();
 	}
 
-	public Item getOne(Long id) {
-		Optional<Item> result = itemRepository.findById(id);
+	public Task getOne(Long id) {
+		Optional<Task> result = taskRepository.findById(id);
 
-		Item item = null;
+		Task task = null;
 
 		if (result.isPresent()) {
-			item = result.get();
+			task = result.get();
 		}
 		else {
 			throw new RuntimeException("Did not find item id - " + id);
 		}
 
-		return item;
+		return task;
 	}
 
-	public void save (Item item) {
-		itemRepository.save(item);
+	public void save (Task task) {
+		taskRepository.save(task);
 	}
 
 	public void deleteById(Long id) {
-		itemRepository.deleteById(id);
+		taskRepository.deleteById(id);
 	}
 
 

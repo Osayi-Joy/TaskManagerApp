@@ -1,19 +1,17 @@
-package com.example.ToDoList.controller;
+package com.jconcept.week_8_taskmanagerapp.controller;
 
-import com.example.ToDoList.entity.User;
-import com.example.ToDoList.service.UserService;
+import com.jconcept.week_8_taskmanagerapp.entity.User;
+import com.jconcept.week_8_taskmanagerapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.logging.Logger;
 
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;

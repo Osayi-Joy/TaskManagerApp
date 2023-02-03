@@ -1,4 +1,4 @@
-package com.example.ToDoList.entity;
+package com.jconcept.week_8_taskmanagerapp.entity;
 
 public enum Status {
 

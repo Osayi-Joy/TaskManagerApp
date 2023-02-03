@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
 	<link rel="stylesheet" href="style.css">
-	<title>To Do List</title>
+	<title>TASK MANAGER APP</title>
 </head>
 
 <body>
@@ -36,26 +36,26 @@
 			<h3 class="card-header text-center">
 				TO DO
 			</h3>
-			<div class="card mb-4 text-center" th:each="item : ${items}"
-				 th:if="${item.status} == 'TODO' and ${item.user.id} == ${#authentication.getPrincipal().getId()}" draggable="true" id="card-todo"
-				 th:href="@{/getOne/(id=${item.id})}"
-				 th:classappend="${(item.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
-                                (item.priority == 'HIGH' ? 'bg-secondary text-white': '') +
-                                (item.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
-                                (item.priority == 'MINOR' ? 'bg-success text-white': '')}">
+			<div class="card mb-4 text-center" th:each="task : ${tasks}"
+				 th:if="${task.status} == 'TODO' and ${task.user.id} == ${#authentication.getPrincipal().getId()}" draggable="true" id="card-todo"
+				 th:href="@{/getOne/(id=${task.id})}"
+				 th:classappend="${(task.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
+                                (task.priority == 'HIGH' ? 'bg-secondary text-white': '') +
+                                (task.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
+                                (task.priority == 'MINOR' ? 'bg-success text-white': '')}">
 				<div class="card-body">
-					<h5 class="bg-danger text-white" th:if="${item.dueDate == (today)}">TODAY!</h5>
-					<h5 class="card-title" th:text="${item.name}"></h5>
+					<h5 class="bg-danger text-white" th:if="${task.dueDate == (today)}">TODAY!</h5>
+					<h5 class="card-title" th:text="${task.name}"></h5>
 					<div class="d-flex justify-content-between">
 						<p class="card-subtitle mb-2"
-						   th:classappend="${item.dueDate &lt; (today)} ? 'bg-danger'"
-						   th:text="${#temporals.format(item.dueDate, 'dd.MM.yyyy')}"></p>
+						   th:classappend="${task.dueDate &lt; (today)} ? 'bg-danger'"
+						   th:text="${#temporals.format(task.dueDate, 'dd.MM.yyyy')}"></p>
 
-						<p class="card-text" th:text="${item.priority}"></p>
+						<p class="card-text" th:text="${task.priority}"></p>
 					</div>
 					<div class="text-center">
-						<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${item.id})}">Edit</a>
-						<a class="btn btn-danger btn-delete mx-1" th:href="@{/delete/(id=${item.id})}">Delete</a>
+						<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${task.id})}">Edit</a>
+						<a class="btn btn-danger btn-delete mx-1" th:href="@{/delete/(id=${task.id})}">Delete</a>
 					</div>
 				</div>
 			</div>
@@ -64,26 +64,26 @@
 			<h3 class="card-header text-center">
 				DOING
 			</h3>
-			<div class="card mb-4 text-center" th:each="item : ${items}"
-				 th:if="${item.status} == 'DOING' and ${item.user.id} == ${#authentication.getPrincipal().getId()}" draggable="true"
-				 th:id="card-doing" th:href="@{/getOne/(id=${item.id})}"
-				 th:classappend="${(item.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
-                                (item.priority == 'HIGH' ? 'bg-secondary text-white': '') +
-                                (item.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
-                                (item.priority == 'MINOR' ? 'bg-success text-white': '')}">
+			<div class="card mb-4 text-center" th:each="task : ${tasks}"
+				 th:if="${task.status} == 'DOING' and ${task.user.id} == ${#authentication.getPrincipal().getId()}" draggable="true"
+				 th:id="card-doing" th:href="@{/getOne/(id=${task.id})}"
+				 th:classappend="${(task.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
+                                (task.priority == 'HIGH' ? 'bg-secondary text-white': '') +
+                                (task.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
+                                (task.priority == 'MINOR' ? 'bg-success text-white': '')}">
 				<div class="card-body">
-					<h5 class="bg-danger text-white" th:if="${item.dueDate == (today)}">TODAY!</h5>
-					<h5 class="card-title" th:text="${item.name}"></h5>
+					<h5 class="bg-danger text-white" th:if="${task.dueDate == (today)}">TODAY!</h5>
+					<h5 class="card-title" th:text="${task.name}"></h5>
 					<div class="d-flex justify-content-between">
 						<p class="card-subtitle mb-2"
-						   th:classappend="${item.dueDate &lt; (today)} ? 'bg-danger'"
-						   th:text="${#temporals.format(item.dueDate, 'dd.MM.yyyy')}"></p>
+						   th:classappend="${task.dueDate &lt; (today)} ? 'bg-danger'"
+						   th:text="${#temporals.format(task.dueDate, 'dd.MM.yyyy')}"></p>
 
-						<p class="card-text" th:text="${item.priority}"></p>
+						<p class="card-text" th:text="${task.priority}"></p>
 					</div>
 					<div class="text-center">
-						<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${item.id})}">Edit</a>
-						<a class="btn btn-danger btn-delete mx-1" th:href="@{/delete/(id=${item.id})}">Delete</a>
+						<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${task.id})}">Edit</a>
+						<a class="btn btn-danger btn-delete mx-1" th:href="@{/delete/(id=${task.id})}">Delete</a>
 					</div>
 				</div>
 			</div>
@@ -92,22 +92,22 @@
 			<h3 class="card-header text-center">
 				DONE
 			</h3>
-			<div class="card mb-4 text-center" th:each="item : ${items}"
-				 th:if="${item.status} == 'DONE' and ${item.user.id} == ${#authentication.getPrincipal().getId()}" draggable="true" id="card-done"
-				 th:href="@{/getOne/(id=${item.id})}"
-				 th:classappend="${(item.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
-                                (item.priority == 'HIGH' ? 'bg-secondary text-white': '') +
-                                (item.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
-                                (item.priority == 'MINOR' ? 'bg-success text-white': '')}">
+			<div class="card mb-4 text-center" th:each="task : ${tasks}"
+				 th:if="${task.status} == 'DONE' and ${task.user.id} == ${#authentication.getPrincipal().getId()}" draggable="true" id="card-done"
+				 th:href="@{/getOne/(id=${task.id})}"
+				 th:classappend="${(task.priority == 'CRITICAL' ? 'bg-warning text-black': '') +
+                                (task.priority == 'HIGH' ? 'bg-secondary text-white': '') +
+                                (task.priority == 'MEDIUM' ? 'bg-primary text-white': '') +
+                                (task.priority == 'MINOR' ? 'bg-success text-white': '')}">
 				<div class="card-body">
-					<h5 class="card-title" th:text="${item.name}"></h5>
+					<h5 class="card-title" th:text="${task.name}"></h5>
 					<div class="d-flex justify-content-between">
-						<p class="card-subtitle mb-2" th:text="${#temporals.format(item.dueDate, 'dd.MM.yyyy')}"></p>
-						<p class="card-text" th:text="${item.priority}"></p>
+						<p class="card-subtitle mb-2" th:text="${#temporals.format(task.dueDate, 'dd.MM.yyyy')}"></p>
+						<p class="card-text" th:text="${task.priority}"></p>
 					</div>
 					<div class="text-center">
-						<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${item.id})}">Edit</a>
-						<a class="btn btn-danger btn-delete mx-1" th:href="@{/delete/(id=${item.id})}">Delete</a>
+						<a class="btn btn-light btn-edit mx-1" th:href="@{/getOne/(id=${task.id})}">Edit</a>
+						<a class="btn btn-danger btn-delete mx-1" th:href="@{/delete/(id=${task.id})}">Delete</a>
 					</div>
 				</div>
 			</div>
@@ -123,7 +123,7 @@
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="add-modal-title">Create New Item</h5>
+				<h5 class="modal-title" id="add-modal-title">Create New Task</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -146,7 +146,7 @@
 							<label class="col-form-label col-4">Priority</label>
 							<div class="col-8">
 								<select class="form-select" name="priority" required>
-									<option th:each="priority : ${T(com.example.ToDoList.entity.Priority).values()}"
+									<option th:each="priority : ${T(com.jconcept.week_8_taskmanagerapp.entity.Priority).values()}"
 											th:value="${priority}" th:text="${priority}"></option>
 								</select>
 							</div>
@@ -158,7 +158,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary" form="add-form">Add item</button>
+				<button type="submit" class="btn btn-primary" form="add-form">Add Task</button>
 			</div>
 		</div>
 	</div>
@@ -168,12 +168,12 @@
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="edit-modal-title">Edit Item</h5>
+				<h5 class="modal-title" id="edit-modal-title">Edit Task</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<form th:action="@{/update}" method="PUT" style="max-width: 600px; margin: 0 auto;" id="edit-form">
-					<input type="hidden" id="idEdit" name="id" th:value="${itemId}"/>
+					<input type="hidden" id="idEdit" name="id" th:value="${taskId}"/>
 					<div class="m-3">
 						<div class="form-group row m-3">
 							<label class="col-form-label col-4">Name</label>
@@ -192,7 +192,7 @@
 							<label class="col-form-label col-4">Priority</label>
 							<div class="col-8">
 								<select class="form-select" id="priorityEdit" name="priority" required>
-									<option th:each="priority : ${T(com.example.ToDoList.entity.Priority).values()}"
+									<option th:each="priority : ${T(com.jconcept.week_8_taskmanagerapp.entity.Priority).values()}"
 											th:value="${priority}" th:text="${priority}"></option>
 								</select>
 							</div>
@@ -201,7 +201,7 @@
 							<label class="col-form-label col-4">Status</label>
 							<div class="col-8">
 								<select class="form-select" id="statusEdit" name="status" required>
-									<option th:each="status : ${T(com.example.ToDoList.entity.Status).values()}"
+									<option th:each="status : ${T(com.jconcept.week_8_taskmanagerapp.entity.Status).values()}"
 											th:value="${status}" th:text="${status}"></option>
 								</select>
 							</div>
@@ -252,7 +252,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				Are you sure you want to delete this item?
+				Are you sure you want to delete this task?
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -286,13 +286,13 @@
 
 				var href = $(this).attr('href');
 
-				$.get(href, function (item, status) {
-					$('#idEdit').val(item.id)
-					$('#nameEdit').val(item.name)
-					$('#dueDateEdit').val(item.dueDate)
-					$('#priorityEdit').val(item.priority)
-					$('#statusEdit').val(item.status)
-					$('#userEdit').val(item.user)
+				$.get(href, function (task, status) {
+					$('#idEdit').val(task.id)
+					$('#nameEdit').val(task.name)
+					$('#dueDateEdit').val(task.dueDate)
+					$('#priorityEdit').val(task.priority)
+					$('#statusEdit').val(task.status)
+					$('#userEdit').val(task.user)
 				});
 
 				$('#edit-modal').modal('show');
@@ -323,13 +323,13 @@
 
 					var href = $(this).attr('href');
 
-					$.get(href, function (item, status) {
-						$('#id').val(item.id)
-						$('#name').val(item.name)
-						$('#dueDate').val(item.dueDate)
-						$('#priority').val(item.priority)
+					$.get(href, function (task, status) {
+						$('#id').val(task.id)
+						$('#name').val(task.name)
+						$('#dueDate').val(task.dueDate)
+						$('#priority').val(task.priority)
 						$('#newStatus').val(newStatus)
-						$('#user').val(item.user)
+						$('#user').val(task.user)
 					});
 
 					$('#status-modal').modal({backdrop: 'static', keyboard: false});

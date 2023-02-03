@@ -1,6 +1,7 @@
-package com.example.ToDoList.repository;
+package com.jconcept.week_8_taskmanagerapp.repository;
 
-import com.example.ToDoList.entity.User;
+
+import com.jconcept.week_8_taskmanagerapp.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

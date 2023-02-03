@@ -1,6 +1,6 @@
-package com.example.ToDoList.security;
+package com.jconcept.week_8_taskmanagerapp.security;
 
-import com.example.ToDoList.entity.User;
+import com.jconcept.week_8_taskmanagerapp.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

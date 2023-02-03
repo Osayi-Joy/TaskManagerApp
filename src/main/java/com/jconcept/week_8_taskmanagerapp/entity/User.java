@@ -1,8 +1,7 @@
-package com.example.ToDoList.entity;
+package com.jconcept.week_8_taskmanagerapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -30,7 +29,7 @@ public class User {
 	}
 
 	@OneToMany(mappedBy = "user")
-	private List<Item> items = new ArrayList<>();
+	private List<Task> tasks = new ArrayList<>();
 
 	public User(String email, String password, String firstName, String lastName) {
 		this.email = email;
@@ -79,12 +78,8 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public List<Item> getItems() {
-		return items;
-	}
-
-	public void setItems(List<Item> items) {
-		this.items = items;
+	public List<Task> getTasks() {
+		return tasks;
 	}
 
 	@Override
